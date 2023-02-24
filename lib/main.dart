@@ -24,34 +24,40 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
 
-  var searchValue;
-  var laloq = "";
-
+  // var searchValue;
+  // var laloq = "";
+var laphrase= "oui c'est moi";
   
-  Future<List<String?>> getLocation() async {
-    var lesplaces;
-    List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
+  // Future<List<String?>> getLocation() async {
+  //   var lesplaces;
+  //   List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
 
-    List<Placemark> placemarks = await placemarkFromCoordinates(locations[1].latitude, locations[1].longitude);
-    lesplaces = [placemarks[1].country,placemarks[1].name];
-    print(lesplaces);
-    return lesplaces;
-  }
+  //   List<Placemark> placemarks = await placemarkFromCoordinates(locations[1].latitude, locations[1].longitude);
+  //   lesplaces = [placemarks[1].country,placemarks[1].name];
+  //   print(lesplaces);
+  //   return lesplaces;
+  // }
 
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EasySearchBar(
-        title: Text('Value: $laloq'),
-        onSearch: (value) => setState(() => laloq = value),
-        suggestions: ["oui"]
+      // appBar: EasySearchBar(
+      //   title: Text('Value: $laloq'),
+      //   onSearch: (value) => setState(() => laloq = value),
+      //   suggestions: ["oui"]
 
-      ),
+      // ),
       body:  
       Center(
         child: 
         Column(
           children: [
+            TextField(
+              onChanged: (value) => setState(() {
+                laphrase = value;
+              }),
+            ),
+            Text(laphrase),
             Flexible(
               child: FlutterMap(
 
