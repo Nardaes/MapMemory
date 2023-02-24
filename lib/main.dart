@@ -79,26 +79,6 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ],
                   ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: LatLng(48.1, 2.2),
-                        width: 30,
-                        height: 30,
-                        builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-                      ),
-                    ],
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: LatLng(70, 2.2),
-                        width: 30,
-                        height: 30,
-                        builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
