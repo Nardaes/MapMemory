@@ -83,8 +83,8 @@ class _MyAppState extends State<MyApp> {
                 mapController: mapController,
                 children: [
                   TileLayer(
-                    urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                    urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+                    subdomains: const ['a', 'b', 'c'],
                   ),
                   MarkerLayer(
                     markers: [
