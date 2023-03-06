@@ -1,9 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MaterialApp(
@@ -22,42 +22,52 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-
-  // var searchValue;
-  // var laloq = "";
-var laphrase= "oui c'est moi";
   
-  // Future<List<String?>> getLocation() async {
-  //   var lesplaces;
-  //   List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
+  MapController mapController = MapController();
+  LatLng lepoint = LatLng(48, 2.2);
 
-  //   List<Placemark> placemarks = await placemarkFromCoordinates(locations[1].latitude, locations[1].longitude);
-  //   lesplaces = [placemarks[1].country,placemarks[1].name];
-  //   print(lesplaces);
-  //   return lesplaces;
-  // }
+  void searchAddress(String address) async {
+    String apiUrl =
+      'https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=1';
 
+    var response = await http.get(Uri.parse(apiUrl));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data.isNotEmpty) {
+        double lat = double.parse(data[0]['lat']);
+        double lon = double.parse(data[0]['lon']);
+        setState(() {
+          mapController.move(LatLng(lat, lon), 13.0);
+          lepoint = LatLng(lat, lon);
+        });
+      }
+    }
 
+  }
+  
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: EasySearchBar(
-      //   title: Text('Value: $laloq'),
-      //   onSearch: (value) => setState(() => laloq = value),
-      //   suggestions: ["oui"]
-
-      // ),
+      
       body:  
       Center(
         child: 
         Column(
           children: [
+            
             TextField(
-              onChanged: (value) => setState(() {
-                laphrase = value;
-              }),
+              decoration: const InputDecoration(
+                labelText: 'Recherche d\'adresse',
+              ),
+              onChanged: (value) {
+                searchAddress(value);
+              },
             ),
-            Text(laphrase),
+
+            
+
+            
             Flexible(
               child: FlutterMap(
 
@@ -70,6 +80,7 @@ var laphrase= "oui c'est moi";
                   ),
 
                 ),
+                mapController: mapController,
                 children: [
                   TileLayer(
                     urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -78,7 +89,7 @@ var laphrase= "oui c'est moi";
                   MarkerLayer(
                     markers: [
                       Marker(
-                        point: LatLng(48, 2.2),
+                        point: lepoint,
                         width: 30,
                         height: 30,
                         builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
@@ -86,6 +97,7 @@ var laphrase= "oui c'est moi";
                     ],
                   ),
                 ],
+                
               ),
             ),
           ],
