@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -22,24 +23,43 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
+  TextEditingController _textController = TextEditingController();
   MapController mapController = MapController();
   LatLng lepoint = LatLng(48, 2.2);
+  var suggestions;
+
 
   void searchAddress(String address) async {
-    String apiUrl =
-      'https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=1';
-
+    String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=3';
+    List<dynamic> lessuggestion = [];
     var response = await http.get(Uri.parse(apiUrl));
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+
       if (data.isNotEmpty) {
         double lat = double.parse(data[0]['lat']);
         double lon = double.parse(data[0]['lon']);
+
+        print(data.length);
+
+        int nbr = 0;
+        for(var ladata in data){
+          print(ladata["display_name"]);
+          lessuggestion.add(ladata["display_name"]);
+          lessuggestion.add(ladata["lat"]);
+          lessuggestion.add(ladata["lon"]);
+        }
+        
+         print(lessuggestion);
+
         setState(() {
           mapController.move(LatLng(lat, lon), 13.0);
           lepoint = LatLng(lat, lon);
+          suggestions = lessuggestion;
         });
+        
+
       }
     }
 
@@ -57,6 +77,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             
             TextField(
+              controller: _textController,
               decoration: const InputDecoration(
                 labelText: 'Recherche d\'adresse',
               ),
@@ -64,9 +85,22 @@ class _MyAppState extends State<MyApp> {
                 searchAddress(value);
               },
             ),
-
             
-
+            // ListView.builder(
+            //   itemCount : suggestions,
+            //   itemBuilder: (BuildContext context, int index) { 
+            //      if(suggestions != null){
+            //        for(var suggestion in suggestions){
+            //          return Text(suggestion);
+            //        }
+            //      }
+            //      else{
+            //        return const Text('suggestion');
+            //      }
+                 
+            //   },
+              
+            // ),
             
             Flexible(
               child: FlutterMap(
