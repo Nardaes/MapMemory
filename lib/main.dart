@@ -25,11 +25,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TextEditingController _textController = TextEditingController();
+  
   MapController mapController = MapController();
   LatLng lepoint = LatLng(48, 2.2);
   List<List<dynamic>> suggestions = [];
   double sizeOfSearch = 0;
+  bool isButtonVisible = false;
+  List<dynamic> theLocToSave=[];
 
   void searchAddress(String address) async {
 
@@ -71,95 +73,114 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void moveTo(LatLng latAndLon) async {
+  void moveTo(List<dynamic> theLoc) async {
+
+    LatLng lal = LatLng(double.parse(theLoc[1]), double.parse(theLoc[2])) ;
     setState(() {
-            mapController.move(latAndLon, 13.0);
-            lepoint = latAndLon;
+            mapController.move(lal, 13.0);
+            lepoint = lal;
             sizeOfSearch = 0;
+            isButtonVisible = true;
+            theLocToSave = theLoc;
           });
+  }
+
+  void saveTheLoc() async{
+    if(theLocToSave != []){
+      
+    }
   }
   
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Colors.cyan,
       body:  
-      Center(
-        child: 
-        Column(
-          children: [
-            
-            TextField(
-              controller: _textController,
-              decoration: const InputDecoration(
-                labelText: 'Recherche d\'adresse',
-              ),
-              onChanged: (value) {
-                searchAddress(value);
-              },
-            ),
-            
-            SizedBox(
-              height: sizeOfSearch,
-              child : ListView.builder(
-                itemCount : suggestions.length,
-                itemBuilder: (BuildContext context, int index) { 
-                  if(suggestions != null){
-                    return GestureDetector(
-                      onTap: () {
-                        print(suggestions[index][0]);
-                        LatLng lal = LatLng(double.parse(suggestions[index][1]), double.parse(suggestions[index][2])) ;
-                        moveTo(lal);
-                      },
-                      child: Text(
-                        suggestions[index][0],
-                      ),
-                    );
-                     
-                  }
-                  return const Text('');
-                },
-                
-              ), 
-            ),
-            
-            
-            Flexible(
-              child: FlutterMap(
-
-                options: MapOptions(
-                  center: LatLng(45.835300, 1.262500),
-                  zoom:5,
-                  maxBounds: LatLngBounds(
-                    LatLng(-90, -180.0),
-                    LatLng(90.0, 180.0),
-                  ),
-
+        Center(
+          child: 
+          Column(
+            children: [
+              
+              TextField(
+                decoration: const InputDecoration(
+                  labelText: 'Recherche d\'adresse',
                 ),
-                mapController: mapController,
-                children: [
-                  TileLayer(
-                    urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
-                    subdomains: const ['a', 'b', 'c'],
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: lepoint,
-                        width: 30,
-                        height: 30,
-                        builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-                      ),
-                    ],
-                  ),
-                ],
-                
+                onChanged: (value) {
+                  searchAddress(value);
+                },
               ),
-            ),
-          ],
+              
+              SizedBox(
+                height: sizeOfSearch,
+                child : ListView.builder(
+                  itemCount : suggestions.length,
+                  itemBuilder: (BuildContext context, int index) { 
+                    if(suggestions != null){
+                      return GestureDetector(
+                        onTap: () {
+                          print(suggestions[index]);
+                          moveTo(suggestions[index]);
+                        },
+                        child: Text(
+                          suggestions[index][0],
+                        ),
+                      );
+                      
+                    }
+                    return const Text('');
+                  },
+                  
+                ), 
+              ),
+              
+              
+              Flexible(
+                child: FlutterMap(
+
+                  options: MapOptions(
+                    center: LatLng(45.835300, 1.262500),
+                    zoom:5,
+                    maxBounds: LatLngBounds(
+                      LatLng(-90, -180.0),
+                      LatLng(90.0, 180.0),
+                    ),
+
+                  ),
+                  mapController: mapController,
+                  children: [
+                    TileLayer(
+                      urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+                      subdomains: const ['a', 'b', 'c'],
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: lepoint,
+                          width: 30,
+                          height: 30,
+                          builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
+                        ),
+                      ],
+                    ),
+
+                  ],
+                  
+                ),
+              ),
+              Visibility(
+                visible: isButtonVisible,
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  backgroundColor: Colors.amber,
+                  child: const Icon(Icons.add),
+                  
+                )
+              )
+              
+            ],
+          ),
         ),
-      ),
     );
   }
 
