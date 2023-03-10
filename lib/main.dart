@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -26,43 +28,55 @@ class _MyAppState extends State<MyApp> {
   TextEditingController _textController = TextEditingController();
   MapController mapController = MapController();
   LatLng lepoint = LatLng(48, 2.2);
-  var suggestions;
-
+  List<List<dynamic>> suggestions = [];
+  double sizeOfSearch = 0;
 
   void searchAddress(String address) async {
-    String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=3';
-    List<dynamic> lessuggestion = [];
-    var response = await http.get(Uri.parse(apiUrl));
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+    if(address != ""){
 
-      if (data.isNotEmpty) {
-        double lat = double.parse(data[0]['lat']);
-        double lon = double.parse(data[0]['lon']);
+      String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=5';
+      
+      List<List<dynamic>> lessuggestion = [];
+      var response = await http.get(Uri.parse(apiUrl));
 
-        print(data.length);
 
-        int nbr = 0;
-        for(var ladata in data){
-          print(ladata["display_name"]);
-          lessuggestion.add(ladata["display_name"]);
-          lessuggestion.add(ladata["lat"]);
-          lessuggestion.add(ladata["lon"]);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+
+        if (data.isNotEmpty) {
+          for(var ladata in data){
+            List<dynamic> info = [];
+            info.add(ladata["display_name"]);
+            info.add(ladata["lat"]);
+            info.add(ladata["lon"]); 
+            lessuggestion.add(info);
+            
+          }
+
+          setState(() {
+            suggestions = lessuggestion;
+            sizeOfSearch = 100;
+          });
+          
+
         }
-        
-         print(lessuggestion);
-
-        setState(() {
-          mapController.move(LatLng(lat, lon), 13.0);
-          lepoint = LatLng(lat, lon);
-          suggestions = lessuggestion;
-        });
-        
-
       }
     }
+    else{
+      setState(() {
+            suggestions = [];
+            sizeOfSearch = 0;
+          });
+    }
+  }
 
+  void moveTo(LatLng latAndLon) async {
+    setState(() {
+            mapController.move(latAndLon, 13.0);
+            lepoint = latAndLon;
+            sizeOfSearch = 0;
+          });
   }
   
 
@@ -86,21 +100,30 @@ class _MyAppState extends State<MyApp> {
               },
             ),
             
-            // ListView.builder(
-            //   itemCount : suggestions,
-            //   itemBuilder: (BuildContext context, int index) { 
-            //      if(suggestions != null){
-            //        for(var suggestion in suggestions){
-            //          return Text(suggestion);
-            //        }
-            //      }
-            //      else{
-            //        return const Text('suggestion');
-            //      }
-                 
-            //   },
-              
-            // ),
+            SizedBox(
+              height: sizeOfSearch,
+              child : ListView.builder(
+                itemCount : suggestions.length,
+                itemBuilder: (BuildContext context, int index) { 
+                  if(suggestions != null){
+                    return GestureDetector(
+                      onTap: () {
+                        print(suggestions[index][0]);
+                        LatLng lal = LatLng(double.parse(suggestions[index][1]), double.parse(suggestions[index][2])) ;
+                        moveTo(lal);
+                      },
+                      child: Text(
+                        suggestions[index][0],
+                      ),
+                    );
+                     
+                  }
+                  return const Text('');
+                },
+                
+              ), 
+            ),
+            
             
             Flexible(
               child: FlutterMap(
