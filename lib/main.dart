@@ -7,6 +7,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_application/memory.dart';
+import 'package:flutter_application/localdb.dart';
+import 'package:flutter_application/locModel.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -37,7 +40,7 @@ class _MyAppState extends State<MyApp> {
 
     if(address != ""){
 
-      String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=5';
+      String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=5&accept-language=fr-FR';
       
       List<List<dynamic>> lessuggestion = [];
       var response = await http.get(Uri.parse(apiUrl));
@@ -81,7 +84,7 @@ class _MyAppState extends State<MyApp> {
             lepoint = lal;
             sizeOfSearch = 0;
             isButtonVisible = true;
-            theLocToSave = theLoc;
+            theLocToSave = locModel(id: 0, adresse: theLoc[0], latitude: theLoc[1], longitude: theLoc[2]) as List;
           });
   }
 
@@ -95,8 +98,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyan,
-      body:  
+      backgroundColor: const Color.fromARGB(255, 59, 245, 139),
+      body: 
+
         Center(
           child: 
           Column(
@@ -104,8 +108,9 @@ class _MyAppState extends State<MyApp> {
               
               TextField(
                 decoration: const InputDecoration(
-                  labelText: 'Recherche d\'adresse',
+                  icon: Icon(Icons.search),
                 ),
+                
                 onChanged: (value) {
                   searchAddress(value);
                 },
@@ -168,19 +173,48 @@ class _MyAppState extends State<MyApp> {
                   
                 ),
               ),
-              Visibility(
-                visible: isButtonVisible,
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: Colors.amber,
-                  child: const Icon(Icons.add),
-                  
-                )
-              )
               
             ],
           ),
         ),
+
+        bottomNavigationBar: BottomAppBar(
+          color : const Color.fromARGB(255, 59, 245, 139),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                IconButton(
+                  tooltip: 'Liste des adresses',
+                  icon: const Icon(Icons.checklist_rtl),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => memory()),
+                    );
+                  },
+                ),
+              ],
+          ),
+        ),
+
+        floatingActionButton : Visibility(
+          visible: isButtonVisible,
+          child: FloatingActionButton(
+            onPressed: () async {
+              if(theLocToSave != []){
+                print(theLocToSave[0]);
+                // MyDatabase.instance.insert(theLocToSave[0], theLocToSave[1],theLocToSave[2]);
+              }
+              
+            },
+            backgroundColor: Colors.amber,
+            tooltip: 'Ajouter une adresse',
+            child: const Icon(Icons.add),
+          )
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+
+        
     );
   }
 
