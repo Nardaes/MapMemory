@@ -34,7 +34,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
+  final champControlleur = TextEditingController();
   MapController mapController = MapController();
   LatLng lepoint = LatLng(48, 2.2);
   List<List<dynamic>> suggestions = [];
@@ -44,9 +44,9 @@ class _MyAppState extends State<MyApp> {
 
   void searchAddress(String address) async {
 
-    if(address != ""){
+    if(champControlleur.text != ""){
 
-      String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=5&accept-language=fr-FR';
+      String apiUrl ='https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=10&accept-language=fr-FR';
       
       List<List<dynamic>> lessuggestion = [];
       var response = await http.get(Uri.parse(apiUrl));
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
 
           setState(() {
             suggestions = lessuggestion;
-            sizeOfSearch = 100;
+            sizeOfSearch = 170;
           });
           
 
@@ -86,6 +86,7 @@ class _MyAppState extends State<MyApp> {
 
     LatLng lal = LatLng(double.parse(theLoc[1]), double.parse(theLoc[2])) ;
     setState(() {
+            champControlleur.text = theLoc[0];
             mapController.move(lal, 13.0);
             lepoint = lal;
             sizeOfSearch = 0;
@@ -94,17 +95,10 @@ class _MyAppState extends State<MyApp> {
           });
   }
 
-  void saveTheLoc() async{
-    if(theLocToSave != []){
-      
-    }
-  }
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyan,
+      backgroundColor: const Color.fromARGB(255, 156, 210, 215),
       body:  
         Center(
           child: 
@@ -112,8 +106,11 @@ class _MyAppState extends State<MyApp> {
             children: [
               
               TextField(
+                controller: champControlleur,
                 decoration: const InputDecoration(
                   labelText: 'Recherche d\'adresse',
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 31, 196, 211)
                 ),
                 onChanged: (value) {
                   searchAddress(value);
@@ -131,8 +128,36 @@ class _MyAppState extends State<MyApp> {
                           print(suggestions[index]);
                           moveTo(suggestions[index]);
                         },
-                        child: Text(
-                          suggestions[index][0],
+                        child: 
+                        Container(
+                          color : Color.fromARGB(255, 156, 210, 215),
+                          child :Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ignore: prefer_const_constructors
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  // ignore: prefer_const_constructors
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    suggestions[index][0],
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
+                              ),
+                              
+                              const Divider(
+                                thickness: 0.5,
+                                color: Colors.grey,
+                              ),
+                            ],
+                            
+                          ),
                         ),
                       );
                       
@@ -184,7 +209,7 @@ class _MyAppState extends State<MyApp> {
         ),
 
         bottomNavigationBar: BottomAppBar(
-          color : const Color.fromARGB(255, 59, 245, 139),
+          color : const Color.fromARGB(255, 31, 196, 211),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -195,7 +220,10 @@ class _MyAppState extends State<MyApp> {
                     
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => memory()),
+                      MaterialPageRoute(
+                        builder: (context) => memory(),
+                        fullscreenDialog: true
+                      ),
                     );
                   },
                 ),
@@ -207,13 +235,13 @@ class _MyAppState extends State<MyApp> {
           visible: isButtonVisible,
           child: FloatingActionButton(
             onPressed: () async {
-              FirebaseFirestore.instance.collection('lesAdresse').add({
-                'nomAdresse': theLocToSave[0],
-                'latitude' : theLocToSave[1],
-                'longitude' : theLocToSave[2]
-              });
               if(theLocToSave != []){
-                print(theLocToSave[0]);
+                FirebaseFirestore.instance.collection('lesAdresse').add({
+                  'nomAdresse': theLocToSave[0],
+                  'latitude' : theLocToSave[1],
+                  'longitude' : theLocToSave[2]
+                });
+                print(theLocToSave[0]+"a etait mit en base");
               }
               
             },
