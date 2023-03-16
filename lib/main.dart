@@ -6,7 +6,18 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/memory.dart';
 
-void main() {
+// firebase import
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application/firebase_options.dart';
+import 'package:firedart/firedart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MaterialApp(
     home: MyApp(),
   ));
@@ -181,6 +192,7 @@ class _MyAppState extends State<MyApp> {
                   tooltip: 'Liste des adresses',
                   icon: const Icon(Icons.checklist_rtl),
                   onPressed: () {
+                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => memory()),
@@ -195,6 +207,11 @@ class _MyAppState extends State<MyApp> {
           visible: isButtonVisible,
           child: FloatingActionButton(
             onPressed: () async {
+              FirebaseFirestore.instance.collection('lesAdresse').add({
+                'nomAdresse': theLocToSave[0],
+                'latitude' : theLocToSave[1],
+                'longitude' : theLocToSave[2]
+              });
               if(theLocToSave != []){
                 print(theLocToSave[0]);
               }

@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class memory extends StatefulWidget {
-
+  const memory({super.key});
   @override
-  State<memory> createState() => _memory();
+    _memory createState() =>  _memory();
 }
 
-// ignore: camel_case_types
-class _memory extends State<memory> {
+class  _memory extends State<memory> {
   
-  List testList = [3,3,3];
-
+  final Stream<QuerySnapshot> adresseCollection = FirebaseFirestore.instance.collection('lesAdresse').snapshots();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Page de memory'),
-      ),
-      body: 
-        SizedBox(
-          height: 1000,
-          child : ListView.builder(
-            itemCount : testList.length,
-            itemBuilder: (BuildContext context, int index) {
-              if(testList != []){
-                return const Text("Je test ma list view");
-              }
-              return const Text('En charge');
-            },
-                  
-          ), 
-        ),
+    return StreamBuilder<QuerySnapshot>(
+      stream: adresseCollection,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
+        }
+
+        return ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+            return Text(data['nomAdresse']);
+          }).toList(),
+        );
+      },
     );
   }
 }
