@@ -9,7 +9,7 @@ import 'package:flutter_application/memory.dart';
 // firebase import
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application/firebase_options.dart';
-import 'package:firedart/firedart.dart';
+// import 'package:firedart/firedart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -99,6 +99,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 156, 210, 215),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 31, 196, 211),
+        title: const Text('MymemoryApp'),
+      ),
       body:  
         Center(
           child: 
@@ -110,7 +114,7 @@ class _MyAppState extends State<MyApp> {
                 decoration: const InputDecoration(
                   labelText: 'Recherche d\'adresse',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 31, 196, 211)
+                  fillColor: Color.fromARGB(255, 255, 255, 255)
                 ),
                 onChanged: (value) {
                   searchAddress(value);
@@ -175,10 +179,12 @@ class _MyAppState extends State<MyApp> {
                   options: MapOptions(
                     center: LatLng(45.835300, 1.262500),
                     zoom:5,
+                    enableMultiFingerGestureRace: false,
                     maxBounds: LatLngBounds(
                       LatLng(-90, -180.0),
                       LatLng(90.0, 180.0),
                     ),
+                    
 
                   ),
                   mapController: mapController,

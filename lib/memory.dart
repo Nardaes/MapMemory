@@ -18,7 +18,7 @@ class  Appmemory extends State<memory> {
       backgroundColor: const Color.fromARGB(255, 156, 210, 215),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 31, 196, 211),
-        title: const Text('Mymemory'),
+        title: const Text('Mymemory List'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: adresseCollection,
