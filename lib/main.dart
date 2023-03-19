@@ -5,12 +5,15 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/memory.dart';
+import 'package:flutter_application/modalAdd.dart';
 
 // firebase import
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application/firebase_options.dart';
 // import 'package:firedart/firedart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 
 void main() async {
@@ -30,10 +33,10 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   final champControlleur = TextEditingController();
   MapController mapController = MapController();
   LatLng lepoint = LatLng(48, 2.2);
@@ -41,6 +44,9 @@ class _MyAppState extends State<MyApp> {
   double sizeOfSearch = 0;
   bool isButtonVisible = false;
   List<dynamic> theLocToSave=[];
+
+  modalAdd maModal = modalAdd();
+
 
   void searchAddress(String address) async {
 
@@ -241,15 +247,11 @@ class _MyAppState extends State<MyApp> {
           visible: isButtonVisible,
           child: FloatingActionButton(
             onPressed: () async {
-              if(theLocToSave != []){
-                FirebaseFirestore.instance.collection('lesAdresse').add({
-                  'nomAdresse': theLocToSave[0],
-                  'latitude' : theLocToSave[1],
-                  'longitude' : theLocToSave[2]
-                });
-                print(theLocToSave[0]+"a etait mit en base");
-              }
-              
+              maModal.modalBuild(context, theLocToSave);
+              LatLng lal = LatLng(48, 2.2);
+              setState(() {
+                    isButtonVisible = false;
+              });
             },
             backgroundColor: Colors.amber,
             tooltip: 'Ajouter une adresse',
@@ -261,5 +263,9 @@ class _MyAppState extends State<MyApp> {
         
     );
   }
+
+
+  
+
 
 }
