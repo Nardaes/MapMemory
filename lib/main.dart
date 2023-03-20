@@ -22,6 +22,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: MyApp(),
   ));
 }
@@ -56,7 +57,7 @@ class MyAppState extends State<MyApp> {
       
       List<List<dynamic>> lessuggestion = [];
       var response = await http.get(Uri.parse(apiUrl));
-
+      double sizeSearch = 170;
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -71,9 +72,16 @@ class MyAppState extends State<MyApp> {
             
           }
 
+          if(data.length <= 4){
+            sizeSearch = 0;
+            for(var ladata in data){
+              sizeSearch = sizeSearch + 35;
+            }
+          }
+
           setState(() {
             suggestions = lessuggestion;
-            sizeOfSearch = 170;
+            sizeOfSearch = sizeSearch;
           });
           
 
@@ -103,9 +111,12 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
+      
       backgroundColor: const Color.fromARGB(255, 156, 210, 215),
       appBar: AppBar(
+        
         backgroundColor: const Color.fromARGB(255, 31, 196, 211),
         title: const Text('MymemoryApp'),
       ),
@@ -144,27 +155,25 @@ class MyAppState extends State<MyApp> {
                           child :Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // ignore: prefer_const_constructors
-                              SizedBox(
-                                height: 10,
+                              const Divider(
+                                thickness: 0.5,
+                                color: Colors.grey,
+                                height: 0,
                               ),
                               Row(
                                 children: [
-                                  // ignore: prefer_const_constructors
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    suggestions[index][0],
-                                    textAlign: TextAlign.left,
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+                                      child: Text(
+                                        suggestions[index][0],
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
                               
-                              const Divider(
-                                thickness: 0.5,
-                                color: Colors.grey,
-                              ),
                             ],
                             
                           ),
