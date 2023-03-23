@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_application/main.dart';
+import 'package:flutter_application/map.dart';
 
 class memory extends StatefulWidget {
   const memory({super.key});
@@ -37,12 +37,7 @@ class  Appmemory extends State<memory> {
               return GestureDetector(
                 onTap: () {
                   
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MyApp(),
-                    ),
-                  );
+                  Navigator.pop(context);
                 },
                 child: ListTile(
                   title: Text(data['nomAdresse']),
