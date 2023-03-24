@@ -204,6 +204,17 @@ class MyAppState extends State<MyApp> {
                         ],
                       ),
                     ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(42 ,02),
+                          width: 30,
+                          height: 30,
+                          builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
+                        ),
+                      ],
+                    ),
+                    
                   ],
                   
                 ),

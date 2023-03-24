@@ -20,7 +20,7 @@ class register extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return MyApp();
           } else {
             return const registerScreen();
           }
