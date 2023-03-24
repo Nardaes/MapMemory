@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/memory.dart';
 import 'package:flutter_application/modalAdd.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // firebase import
 // import 'package:firedart/firedart.dart';
 
@@ -111,7 +112,7 @@ class MyAppState extends State<MyApp> {
               TextField(
                 controller: champControlleur,
                 decoration: const InputDecoration(
-                  labelText: 'Recherche d\'adresse',
+                  labelText: 'Recherche et ajoute d\'adresses',
                   filled: true,
                   fillColor: Color.fromARGB(255, 255, 255, 255)
                 ),
@@ -220,7 +221,7 @@ class MyAppState extends State<MyApp> {
                   tooltip: 'Liste des adresses',
                   icon: const Icon(Icons.checklist_rtl),
                   onPressed: () {
-                    
+                    final User? myUser = FirebaseAuth.instance.currentUser;
                     Navigator.push(
                     context,
                      MaterialPageRoute(builder: (context) => const memory()),

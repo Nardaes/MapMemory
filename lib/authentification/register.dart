@@ -38,33 +38,39 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
-  final bool _isLogin = false;
-  bool _loading = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _password2Controller = TextEditingController();
+  bool isMessageErreur = false;
+  String messageErreur = "";
+
 
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
+    final password2 = _password2Controller.value.text;
+    
+    if(password == password2){
+      isMessageErreur = false;
+       messageErreur ="";
 
-    setState(() => _loading = true);
-
-    //Check if is login or register
-    if (_isLogin) {
-      await Auth().signInWithEmailAndPassword(email, password);
-    } else {
       await Auth().registerWithEmailAndPassword(email, password);
+
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MyApp()),
+      );
     }
-
-    setState(() => _loading = false);
-
-    // ignore: use_build_context_synchronously
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MyApp()),
-    );
+    else{
+      setState(() {
+        isMessageErreur = true;
+        messageErreur = "Les mot de passes ne correspondent pas";
+      });
+      
+    }
 
   }
 
@@ -89,6 +95,16 @@ class _registerScreenState extends State<registerScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+
+                Visibility(
+                  visible: isMessageErreur,
+                  child: Text(
+                    messageErreur
+                    
+                  )
+                ),
+                
+
                 TextFormField(
                   //Assign controller
                   controller: _emailController,
@@ -112,6 +128,7 @@ class _registerScreenState extends State<registerScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+                
                 TextFormField(
                   //Assign controller
                   controller: _passwordController,
@@ -132,6 +149,33 @@ class _registerScreenState extends State<registerScreen> {
                     ),
                   ),
                 ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  //Assign controller
+                  controller: _password2Controller,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Confirmez le mot de passe';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Confirmez le mot de passe',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
                 const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

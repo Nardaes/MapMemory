@@ -38,8 +38,7 @@ class loginScreen extends StatefulWidget {
 }
 
 class _loginScreenState extends State<loginScreen> {
-  final bool _isLogin = false;
-  bool _loading = false;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -48,13 +47,10 @@ class _loginScreenState extends State<loginScreen> {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
-
-    setState(() => _loading = true);
-
-    //Check if is login or register
+    
+    
     await Auth().signInWithEmailAndPassword(email, password);
 
-    setState(() => _loading = false);
 
     // ignore: use_build_context_synchronously
     Navigator.push(

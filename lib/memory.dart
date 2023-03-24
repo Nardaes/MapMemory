@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application/map.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class memory extends StatefulWidget {
   const memory({super.key});
@@ -9,11 +10,16 @@ class memory extends StatefulWidget {
 }
 
 class  Appmemory extends State<memory> {
+
+  final User? myUser = FirebaseAuth.instance.currentUser;
+
   
-  final Stream<QuerySnapshot> adresseCollection = FirebaseFirestore.instance.collection('lesAdresse').snapshots();
+  
+  
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> adresseCollection = FirebaseFirestore.instance.collection('lesAdresse').where('uidUser', isEqualTo: myUser?.uid  ).snapshots();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 156, 210, 215),
       appBar: AppBar(
@@ -23,6 +29,8 @@ class  Appmemory extends State<memory> {
       body: StreamBuilder<QuerySnapshot>(
         stream: adresseCollection,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+
           if (snapshot.hasError) {
             return const Text('Something went wrong');
           }
