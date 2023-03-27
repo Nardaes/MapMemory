@@ -42,25 +42,36 @@ class  Appmemory extends State<memory> {
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-              return GestureDetector(
-                onTap: () {
-                  
-                  Navigator.pop(context);
-                },
-                child: ListTile(
-                  title: Text(data['nomAdresse']),
-                  subtitle : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Latitude : ${data['latitude']}'),
-                      Text('Longitude : ${data['longitude']}'),
-                      const Divider(
-                                  thickness: 0.5,
-                                  color: Colors.grey,
-                      ),
-                    ],
-                  )
-                ),
+              return 
+              // Row(children: [
+                  GestureDetector(
+                  onTap: () {
+                    
+                    Navigator.pop(context);
+                  },
+                  child: ListTile(
+                    title: Text(data['nomAdresse']),
+                    subtitle : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Latitude : ${data['latitude']}'),
+                        Text('Longitude : ${data['longitude']}'),
+                        const Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey,
+                        ),
+                      ],
+                    )
+                  ),
+                // ),
+                // IconButton(
+                //   tooltip: 'supprimer',
+                //   icon: const Icon(Icons.delete),
+                //   onPressed: () {
+                //      print(adresseCollection);
+                //   },
+                // ),
+              // ]
               );
               
 

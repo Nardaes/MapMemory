@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // firebase import
 // import 'package:firedart/firedart.dart';
 
-
+import 'package:geolocator/geolocator.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -23,13 +23,19 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   final champControlleur = TextEditingController();
   MapController mapController = MapController();
-  LatLng lepoint = LatLng(48, 2.2);
+  LatLng lepoint = LatLng(0,0);
   List<List<dynamic>> suggestions = [];
   double sizeOfSearch = 0;
   bool isButtonVisible = false;
+
+
   List<dynamic> theLocToSave=[];
 
   modalAdd maModal = modalAdd();
+
+  
+  LatLng _currentLocation = LatLng(0,0);
+  LatLng tapLocation = LatLng(0,0);
 
 
   void searchAddress(String address) async {
@@ -83,6 +89,8 @@ class MyAppState extends State<MyApp> {
 
     LatLng lal = LatLng(double.parse(theLoc[1]), double.parse(theLoc[2])) ;
     setState(() {
+            tapLocation = LatLng(0,0);
+            _currentLocation = LatLng(0,0);
             champControlleur.text = theLoc[0];
             mapController.move(lal, 13.0);
             lepoint = lal;
@@ -182,6 +190,9 @@ class MyAppState extends State<MyApp> {
                       LatLng(-90, -180.0),
                       LatLng(90.0, 180.0),
                     ),
+                    onTap:(tapPosition, thepointhere) {
+                      tapLocationMove(thepointhere);
+                    },
                     
 
                   ),
@@ -191,9 +202,8 @@ class MyAppState extends State<MyApp> {
                       urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
                       subdomains: const ['a', 'b', 'c'],
                     ),
-                    Visibility(
-                      visible: isButtonVisible,
-                      child: MarkerLayer(
+                    if (lepoint != LatLng(0,0))
+                      MarkerLayer(
                         markers: [
                           Marker(
                             point: lepoint,
@@ -203,17 +213,28 @@ class MyAppState extends State<MyApp> {
                           ),
                         ],
                       ),
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(42 ,02),
-                          width: 30,
-                          height: 30,
-                          builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-                        ),
-                      ],
-                    ),
+                    if (tapLocation != LatLng(0,0))
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: tapLocation,
+                            width: 30,
+                            height: 30,
+                            builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
+                          ),
+                        ],
+                      ),
+                    if (_currentLocation != LatLng(0,0))
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: _currentLocation,
+                            width: 30,
+                            height: 30,
+                            builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
+                          ),
+                        ],
+                      ),
                     
                   ],
                   
@@ -239,6 +260,14 @@ class MyAppState extends State<MyApp> {
                     );
                   },
                 ),
+
+                IconButton(
+                  tooltip: 'Localisation',
+                  icon: const Icon(Icons.zoom_in),
+                  onPressed: () {
+                      _getCurrentLocation();
+                  },
+                ),
               ],
           ),
         ),
@@ -248,7 +277,6 @@ class MyAppState extends State<MyApp> {
           child: FloatingActionButton(
             onPressed: () async {
               maModal.modalBuild(context, theLocToSave);
-              LatLng lal = LatLng(48, 2.2);
               setState(() {
                     isButtonVisible = false;
               });
@@ -265,7 +293,98 @@ class MyAppState extends State<MyApp> {
   }
 
 
-  
 
+  Future<void> tapLocationMove(LatLng clicLatLong) async {
+    String theNameLoc = await searchLatlong(clicLatLong);
+
+
+    setState(() {
+      isButtonVisible = true;
+      _currentLocation = LatLng(0,0);
+      tapLocation = clicLatLong;
+      theLocToSave = [theNameLoc, clicLatLong.latitude, clicLatLong.longitude];
+    });
+
+    print(theLocToSave);
+  }
+
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the 
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale 
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+  
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately. 
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+
+
+
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+
+    String theNameLoc = await searchLatlong(_currentLocation);
+    setState(() {
+      isButtonVisible = true;
+      tapLocation = LatLng(0,0);
+      _currentLocation = LatLng(position.latitude, position.longitude);
+      mapController.move(_currentLocation, 13.0);
+      
+      theLocToSave = [theNameLoc, _currentLocation.latitude, _currentLocation.longitude];
+    });
+  }
+
+
+
+  Future<String> searchLatlong(LatLng laLatEtLaLong) async {
+
+
+
+    if(laLatEtLaLong != null){
+
+      double theLat = laLatEtLaLong.latitude;
+      double theLong = laLatEtLaLong.longitude;
+
+      String apiUrl ='https://nominatim.openstreetmap.org/reverse?lat=$theLat&lon=$theLong&accept-language=fr-FR&format=json&limit=1';
+      var response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+
+        if (data.isNotEmpty) {
+          print(data["display_name"]);
+          return data["display_name"];
+        }
+
+        
+      }
+
+      
+    }
+
+    return "Inconnue";
+  }
 
 }
