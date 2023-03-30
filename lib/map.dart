@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application/memory.dart';
 import 'package:flutter_application/modalAdd.dart';
+import 'package:flutter_application/pointMemo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // firebase import
 // import 'package:firedart/firedart.dart';
@@ -32,6 +33,8 @@ class MyAppState extends State<MyApp> {
   List<dynamic> theLocToSave=[];
 
   modalAdd maModal = modalAdd();
+
+  pointMemo mesPoints = pointMemo();
 
   
   LatLng _currentLocation = LatLng(0,0);
@@ -202,6 +205,9 @@ class MyAppState extends State<MyApp> {
                       urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
                       subdomains: const ['a', 'b', 'c'],
                     ),
+                    // MarkerLayer(
+                    //   // markers : [pointMemo()],
+                    // ),
                     if (lepoint != LatLng(0,0))
                       MarkerLayer(
                         markers: [
