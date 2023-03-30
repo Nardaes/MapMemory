@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1033080986632-d0u20fn1rtfqcff582hj3cka1s12ovsn.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1033080986632-d0u20fn1rtfqcff582hj3cka1s12ovsn</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBV8yDkXghw0JF1Ma9Tyul6r_lpT0KELR0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1033080986632</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flutterApplication</string>
+	<key>PROJECT_ID</key>
+	<string>mapmemory-87</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mapmemory-87.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1033080986632:ios:99b92353d217c80887c5bd</string>
+	<key>DATABASE_URL</key>
+	<string>https://mapmemory-87-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
