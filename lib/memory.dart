@@ -43,8 +43,8 @@ class  Appmemory extends State<memory> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
               return 
-              // Row(children: [
-                  GestureDetector(
+              Column(children: [
+                GestureDetector(
                   onTap: () {
                     
                     Navigator.pop(context);
@@ -56,23 +56,22 @@ class  Appmemory extends State<memory> {
                       children: [
                         Text('Latitude : ${data['latitude']}'),
                         Text('Longitude : ${data['longitude']}'),
-                        const Divider(
-                                    thickness: 0.5,
-                                    color: Colors.grey,
-                        ),
                       ],
                     )
                   ),
-                // ),
-                // IconButton(
-                //   tooltip: 'supprimer',
-                //   icon: const Icon(Icons.delete),
-                //   onPressed: () {
-                //      print(adresseCollection);
-                //   },
-                // ),
-              // ]
-              );
+                ),
+                IconButton(
+                  tooltip: 'supprimer',
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                     document.reference.delete();
+                  },
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.grey,
+                ),
+              ]);
               
 
             }).toList(),
