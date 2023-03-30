@@ -64,7 +64,7 @@ class  Appmemory extends State<memory> {
                   tooltip: 'supprimer',
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                     document.reference.delete();
+                     document.reference.delete(); 
                   },
                 ),
                 const Divider(
