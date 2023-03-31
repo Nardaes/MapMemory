@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+         return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -67,5 +61,26 @@ class DefaultFirebaseOptions {
     projectId: 'mapmemory-87',
     databaseURL: 'https://mapmemory-87-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mapmemory-87.appspot.com',
+  );
+
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDeX810m5p3XuyrF1Ok5f2QHR401wuj8GI',
+    appId: '1:1033080986632:android:6326cf61d4fbfc7787c5bd',
+    messagingSenderId: '1033080986632',
+    projectId: 'mapmemory-87',
+    storageBucket: 'mapmemory-87.appspot.com',
+    iosClientId: '1033080986632-d0u20fn1rtfqcff582hj3cka1s12ovsn.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flutterApplication',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDeX810m5p3XuyrF1Ok5f2QHR401wuj8GI',
+    appId: '1:1033080986632:android:6326cf61d4fbfc7787c5bd',
+    messagingSenderId: '1033080986632',
+    projectId: 'mapmemory-87',
+    storageBucket: 'mapmemory-87.appspot.com',
+    iosClientId: '1033080986632-d0u20fn1rtfqcff582hj3cka1s12ovsn.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flutterApplication',
   );
 }

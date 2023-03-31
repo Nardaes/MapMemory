@@ -196,6 +196,7 @@ class MyAppState extends State<MyApp> {
                     onTap:(tapPosition, thepointhere) {
                       tapLocationMove(thepointhere);
                     },
+                    maxZoom: 18
                     
 
                   ),
