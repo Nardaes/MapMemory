@@ -188,7 +188,7 @@ class MyAppState extends State<MyApp> {
                   options: MapOptions(
                     center: LatLng(45.835300, 1.262500),
                     zoom:5,
-                    enableMultiFingerGestureRace: false,
+                    enableMultiFingerGestureRace: true,
                     maxBounds: LatLngBounds(
                       LatLng(-90, -180.0),
                       LatLng(90.0, 180.0),
@@ -197,7 +197,6 @@ class MyAppState extends State<MyApp> {
                       tapLocationMove(thepointhere);
                     },
                     maxZoom: 18
-                    
 
                   ),
                   mapController: mapController,
