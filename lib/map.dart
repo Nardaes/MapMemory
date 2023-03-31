@@ -123,7 +123,7 @@ class MyAppState extends State<MyApp> {
               TextField(
                 controller: champControlleur,
                 decoration: const InputDecoration(
-                  labelText: 'Recherche et ajoute d\'adresses',
+                  labelText: 'Recherche et ajout d\'adresses',
                   filled: true,
                   fillColor: Color.fromARGB(255, 255, 255, 255)
                 ),
@@ -205,9 +205,7 @@ class MyAppState extends State<MyApp> {
                       urlTemplate: "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
                       subdomains: const ['a', 'b', 'c'],
                     ),
-                    // MarkerLayer(
-                    //   // markers : [pointMemo()],
-                    // ),
+                    mesPoints,
                     if (lepoint != LatLng(0,0))
                       MarkerLayer(
                         markers: [

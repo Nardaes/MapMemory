@@ -103,3 +103,4 @@ flutter:
 
   assets : 
     - assets/gpsPoint.png
+    - assets/gpsPointSave.png
