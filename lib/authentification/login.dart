@@ -147,7 +147,7 @@ class _loginScreenState extends State<loginScreen> {
                     )
                   },
                   child: 
-                      const Text('Page d\'enregisgrement'),
+                      const Text('Page d\'enregistrement'),
                 ),
               ],
                 

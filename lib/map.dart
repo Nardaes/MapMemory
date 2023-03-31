@@ -282,7 +282,10 @@ class MyAppState extends State<MyApp> {
             onPressed: () async {
               maModal.modalBuild(context, theLocToSave);
               setState(() {
+
+                    champControlleur.text = "";
                     isButtonVisible = false;
+                    sizeOfSearch = 0;
               });
             },
             backgroundColor: Colors.amber,
@@ -304,6 +307,7 @@ class MyAppState extends State<MyApp> {
 
     setState(() {
       isButtonVisible = true;
+      lepoint = LatLng(0,0);
       _currentLocation = LatLng(0,0);
       tapLocation = clicLatLong;
       theLocToSave = [theNameLoc, clicLatLong.latitude, clicLatLong.longitude];
@@ -353,6 +357,7 @@ class MyAppState extends State<MyApp> {
     setState(() {
       isButtonVisible = true;
       tapLocation = LatLng(0,0);
+      lepoint = LatLng(0,0);
       _currentLocation = LatLng(position.latitude, position.longitude);
       mapController.move(_currentLocation, 13.0);
       
