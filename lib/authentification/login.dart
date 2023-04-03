@@ -9,6 +9,8 @@ import 'auth.dart';
 class login extends StatelessWidget {
   const login({super.key});
 
+  
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -41,20 +43,36 @@ class _loginScreenState extends State<loginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool errorConnect = false;
+
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
-    
-    
-    await Auth().signInWithEmailAndPassword(email, password);
 
+    setState(() {
+      errorConnect = false;
+    });
+    
+    bool result = await Auth().signInWithEmailAndPassword(email, password);
 
+    print(result);
     // ignore: use_build_context_synchronously
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MyApp()),
-    );
+    if(result == true){
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MyApp()),
+      );
+    }
+    else{
+      
+      Future.delayed(const Duration(milliseconds: 50), () {
+        setState(() {
+          errorConnect = true;
+        });
+      });
+    }
 
   }
 
@@ -79,6 +97,18 @@ class _loginScreenState extends State<loginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+
+                 Visibility(
+                  visible: errorConnect,
+                  child: const Text("Email ou mot de passe invalide",
+                    style: TextStyle(
+                      color: Colors.red, 
+                      decoration: TextDecoration.underline
+                    ),
+                  )
+                ),
+
+
                 TextFormField(
                   //Assign controller
                   controller: _emailController,
@@ -152,47 +182,6 @@ class _loginScreenState extends State<loginScreen> {
               ],
                 
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 31, 196, 211),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children:[ ElevatedButton(
-                onPressed: () {
-                  //Use this to Log Out user
-                  FirebaseAuth.instance.signOut();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                ),
-                child: const Text('Se déconnecter'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyApp()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                ),
-                child: const Text('retour sur la carte'),
-              ),
-            ]
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/authentification/login.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
@@ -259,8 +260,8 @@ class MyAppState extends State<MyApp> {
                   onPressed: () {
                     final User? myUser = FirebaseAuth.instance.currentUser;
                     Navigator.push(
-                    context,
-                     MaterialPageRoute(builder: (context) => const memory()),
+                      context,
+                      MaterialPageRoute(builder: (context) => const memory()),
                     );
                   },
                 ),
@@ -270,6 +271,18 @@ class MyAppState extends State<MyApp> {
                   icon: const Icon(Icons.zoom_in),
                   onPressed: () {
                       _getCurrentLocation();
+                  },
+                ),
+
+                IconButton(
+                  tooltip: 'Déconnexion',
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const login()),
+                      );
                   },
                 ),
               ],

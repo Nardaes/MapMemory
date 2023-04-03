@@ -45,13 +45,13 @@ class ApppointMemo extends State<pointMemo>{
             
             LatLng oneOfAllLatLong = LatLng(oneOfAllLat2, oneOfAllLong2);
 
-            print(oneOfAllLatLong);
+            
 
             return 
               Marker(
                 point: oneOfAllLatLong,
-                width: 20,
-                height: 20,
+                width: 8,
+                height: 8,
                 builder: (ctx) => const Image(image: AssetImage('assets/gpsPointSave.png')),
               );
           }).toList(),
@@ -63,53 +63,3 @@ class ApppointMemo extends State<pointMemo>{
   
   
 }
-// Future<StreamBuilder<QuerySnapshot<Object?>>> build(BuildContext context) async {
-//     final Stream<QuerySnapshot> adresseCollection = FirebaseFirestore.instance.collection('lesAdresse').where('uidUser', isEqualTo: myUser?.uid  ).snapshots();
-
-
-//     return StreamBuilder<QuerySnapshot>(
-//       stream: adresseCollection,
-//       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-
-//         if (snapshot.hasError) {
-//           return const Text('Something went wrong');
-//         }
-
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return const Text("Loading");
-//         }
-
-//         return MarkerLayer(
-//           markers: snapshot.data!.docs.map((DocumentSnapshot document) {
-//           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-//             return 
-//             Marker(
-//               point: LatLng(data['latitude'], data['longitude']),
-//               width: 20,
-//               height: 20,
-//               builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-//             );
-//           }).toList(),
-//         );
-//       }
-//     );
-//   }
-// return markers;
-
-// var markers = MarkerLayer(
-//       markers :[ 
-//         Marker(
-//           point: LatLng(20, 21),
-//           width: 20,
-//           height: 20,
-//           builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-//         ),
-//         Marker(
-//           point: LatLng(21, 20),
-//           width: 20,
-//           height: 20,
-//           builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
-//         ),
-//       ],
-//     );

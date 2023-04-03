@@ -49,18 +49,41 @@ class _registerScreenState extends State<registerScreen> {
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
     final password2 = _password2Controller.value.text;
+
     
     if(password == password2){
       isMessageErreur = false;
        messageErreur ="";
 
-      await Auth().registerWithEmailAndPassword(email, password);
+      int result = await Auth().registerWithEmailAndPassword(email, password);
+
+      if(result == 101){
+        setState(() {
+          isMessageErreur = true;
+          messageErreur = "l'email est invalide";
+        });
+      }else if(result == 102){
+        setState(() {
+          isMessageErreur = true;
+          messageErreur = "Mot de passe trop faible";
+        });
+      }else if(result == 103){
+        setState(() {
+          isMessageErreur = true;
+          messageErreur = "Une Erreur s'est produite";
+        });
+      }else{
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyApp()),
+        );
+      }
 
       // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const MyApp()),
-      );
+      
+
+
     }
     else{
       setState(() {
