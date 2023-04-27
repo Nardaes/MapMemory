@@ -113,7 +113,7 @@ class MyAppState extends State<MyApp> {
       appBar: AppBar(
         
         backgroundColor: const Color.fromARGB(255, 31, 196, 211),
-        title: const Text('MymemoryApp'),
+        title: const Text('MapMemory'),
       ),
       body:  
         Center(
@@ -212,8 +212,8 @@ class MyAppState extends State<MyApp> {
                         markers: [
                           Marker(
                             point: lepoint,
-                            width: 30,
-                            height: 30,
+                            width: 35,
+                            height: 70,
                             builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
                           ),
                         ],
@@ -223,8 +223,8 @@ class MyAppState extends State<MyApp> {
                         markers: [
                           Marker(
                             point: tapLocation,
-                            width: 30,
-                            height: 30,
+                            width: 35,
+                            height: 70,
                             builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
                           ),
                         ],
@@ -234,8 +234,8 @@ class MyAppState extends State<MyApp> {
                         markers: [
                           Marker(
                             point: _currentLocation,
-                            width: 30,
-                            height: 30,
+                            width: 35,
+                            height: 70,
                             builder: (ctx) => const Image(image: AssetImage('assets/gpsPoint.png')),
                           ),
                         ],

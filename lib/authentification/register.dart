@@ -70,7 +70,7 @@ class _registerScreenState extends State<registerScreen> {
       }else if(result == 103){
         setState(() {
           isMessageErreur = true;
-          messageErreur = "Une Erreur s'est produite";
+          messageErreur = "Une erreur s'est produite";
         });
       }else{
         // ignore: use_build_context_synchronously
@@ -120,8 +120,12 @@ class _registerScreenState extends State<registerScreen> {
                 Visibility(
                   visible: isMessageErreur,
                   child: Text(
-                    messageErreur
-                    
+                    messageErreur,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.red, 
+                      decoration: TextDecoration.underline
+                    )
                   )
                 ),
                 

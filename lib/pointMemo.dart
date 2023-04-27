@@ -50,8 +50,8 @@ class ApppointMemo extends State<pointMemo>{
             return 
               Marker(
                 point: oneOfAllLatLong,
-                width: 8,
-                height: 8,
+                width: 25,
+                height: 50,
                 builder: (ctx) => const Image(image: AssetImage('assets/gpsPointSave.png')),
               );
           }).toList(),
