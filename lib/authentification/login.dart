@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/authentification/register.dart';
+import 'package:flutter_application/authentification/reset.dart';
 import 'package:flutter_application/map.dart';
 
 import 'auth.dart';
@@ -98,7 +99,7 @@ class _loginScreenState extends State<loginScreen> {
                   height: 20,
                 ),
 
-                 Visibility(
+                Visibility(
                   visible: errorConnect,
                   child: const Text("Email ou mot de passe invalide",
                     style: TextStyle(
@@ -178,6 +179,22 @@ class _loginScreenState extends State<loginScreen> {
                   },
                   child: 
                       const Text('Page d\'enregistrement'),
+                ),
+
+                const SizedBox(height: 20),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () => {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const reset())
+                    )
+                  },
+                  child: 
+                      const Text('Mot de passe oublié'),
                 ),
               ],
                 
