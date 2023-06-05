@@ -338,7 +338,31 @@ class MyAppState extends State<MyApp> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the 
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+
+      // ignore: use_build_context_synchronously
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('La localisation est dessactivée'),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Fermer'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+
+
+      // return Future.error('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
@@ -350,14 +374,57 @@ class MyAppState extends State<MyApp> {
         // Android's shouldShowRequestPermissionRationale 
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+
+        // ignore: use_build_context_synchronously
+        return showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Vous avez refuser la localisation pour l\'application'),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  child: const Text('Fermer'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        // return Future.error('Location permissions are denied');
       }
     }
   
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately. 
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
+
+      // ignore: use_build_context_synchronously
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Vous avez refuser la localisation pour l\'application'),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Fermer'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+      // return Future.error(
+      //   'Location permissions are permanently denied, we cannot request permissions.');
     }
 
 

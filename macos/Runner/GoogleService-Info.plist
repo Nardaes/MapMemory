@@ -32,5 +32,7 @@
 	<string>1:1033080986632:ios:99b92353d217c80887c5bd</string>
 	<key>DATABASE_URL</key>
 	<string>https://mapmemory-87-default-rtdb.europe-west1.firebasedatabase.app</string>
+	<key>SERVER_CLIENT_ID</key>
+	<string>1033080986632-fpgrspvv558ql5p1u2dk0vr8dpeu7je3.apps.googleusercontent.com</string>
 </dict>
 </plist>

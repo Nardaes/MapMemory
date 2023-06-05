@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/authentification/register.dart';
 import 'package:flutter_application/authentification/reset.dart';
 import 'package:flutter_application/map.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'auth.dart';
 
